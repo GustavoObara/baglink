@@ -4,15 +4,13 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
 const UrlInput: React.FC = () => {
-  const [url, setUrl] = useState('');  // Estado para armazenar a URL
+  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [userId, setUserId] = useState<string | null>(null);  // Estado para armazenar o ID do usuário
-
+  const [userId, setUserId] = useState<string | null>(null);
   const supabase = createClient();
 
-  // Obtém o ID do usuário autenticado
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user }, error } = await supabase.auth.getUser();
@@ -43,24 +41,21 @@ const UrlInput: React.FC = () => {
       setError('');
       setSuccess('');
 
-      // Enviar a URL para o Supabase junto com id_user e finish
       const { data, error } = await supabase
         .from('items')
         .insert([{ 
-          id_user: userId,   // Adiciona o ID do usuário
-          url,               // A URL que foi inserida
-          finish: false      // O estado "finish" como false por padrão
+          id_user: userId,  
+          url,               
+          finish: false     
         }]);
 
       if (error) {
         throw error;
       }
 
-      // Limpa o campo de input e exibe uma mensagem de sucesso
       setUrl('');
       setSuccess('URL enviada com sucesso!');
 
-      // Aguardar 2 segundos e recarregar a página
       setTimeout(() => {
         window.location.reload(); 
       }, 1000);

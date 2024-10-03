@@ -22,10 +22,7 @@ const LinkPreviewRow = ({ items, currentUser, linkUser }: { items: Item[]; curre
     const [previewData, setPreviewData] = useState<PreviewData[]>([]);
     const [loading, setLoading] = useState(true);
     const [itemStates, setItemStates] = useState(items.map(item => item.finish));
-    // Esse console log é importante no futuro caso algum erro apareça
-    // console.log('teste', currentUser, linkUser);
 
-    // Faz a requisição para o backend para obter os dados do link preview
     const fetchPreviewData = async (url: string) => {
     const response = await fetch('http://localhost:5000/link-preview', {
         method: 'POST',
@@ -51,12 +48,11 @@ const LinkPreviewRow = ({ items, currentUser, linkUser }: { items: Item[]; curre
     if (loading) { return <div>Carregando...</div>; }
 
     const handleFinishToggle = (index) => {
-        // Inverte o estado do finish
         const updatedFinish = !itemStates[index];
         const newStates = [...itemStates];
         newStates[index] = updatedFinish;
 
-        setItemStates(newStates); // Atualiza o estado
+        setItemStates(newStates);
     };
 
     return (
@@ -64,7 +60,6 @@ const LinkPreviewRow = ({ items, currentUser, linkUser }: { items: Item[]; curre
             {previewData.map((preview, index) => (
                 <div key={items[index].id} className="flex">
                     <div className="flex items-center mx-3">
-                        {/* Componente de Controle de Finish */}
                         <FinishToggle 
                             itemId={items[index].id} 
                             currentUser={currentUser} 

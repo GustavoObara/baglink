@@ -4,15 +4,12 @@ import LinkPreviewRow from "@/components/link-preview-row";
 import UrlInput from "@/components/input-item";
 
 export default async function UserItemsPage({ params }: { params: { id_user: string } }) {
-  // Cria o cliente Supabase
   const supabase = createClient();
 
-  // Obtém o usuário autenticado
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redireciona para a página de login se o usuário não estiver autenticado
   if (!user) {
     return redirect("/sign-in");
   }
@@ -48,7 +45,6 @@ export default async function UserItemsPage({ params }: { params: { id_user: str
       return (
         <div className="min-h-screen">
           <h3 className="text-2xl font-bold mb-4">{userName} Não possuí itens em sua BagLink!</h3>
-          {/* <LinkPreviewRow items={items} currentUser={currentUser} linkUser={linkUser} /> */}
       </div>
       );
     }
@@ -61,12 +57,10 @@ export default async function UserItemsPage({ params }: { params: { id_user: str
     );
   }
 
-  // Se nenhum item for retornado, mostre uma mensagem
   if (items.length === 0) {
     return (
       <div className="min-h-screen">
         <h3 className="text-2xl font-bold mb-4">Olá {user.user_metadata?.name.charAt(0).toUpperCase() + user.user_metadata?.name.slice(1)} Parece que você ainda não possuí Produtos em Sua BagLink começe adicionando uma url!</h3>
-        {/* <LinkPreviewRow items={items} currentUser={currentUser} linkUser={linkUser}/> */}
       <UrlInput/>
     </div>
     );

@@ -26,11 +26,9 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          {/* Nome completo */}
           <Label htmlFor="name">Full Name</Label>
           <Input name="name" placeholder="Your full name" required />
 
-          {/* Email */}
           <Label htmlFor="email">Email</Label>
           <Input
             name="email"
@@ -40,7 +38,6 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
             aria-describedby="emailHelp"
           />
 
-          {/* Senha */}
           <Label htmlFor="password">Password</Label>
           <Input
             type="password"
@@ -50,12 +47,10 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
             required
           />
 
-          {/* Botão de submit */}
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up
           </SubmitButton>
 
-          {/* Exibir mensagens de erro/sucesso */}
           <FormMessage message={searchParams} />
         </div>
       </form>
