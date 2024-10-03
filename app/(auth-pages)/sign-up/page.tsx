@@ -16,7 +16,7 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
   }
 
   return (
-    <>
+    <div>
       <form className="flex flex-col min-w-64 max-w-64 mx-auto">
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
@@ -26,8 +26,21 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
           </Link>
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+          {/* Nome completo */}
+          <Label htmlFor="name">Full Name</Label>
+          <Input name="name" placeholder="Your full name" required />
+
+          {/* Email */}
           <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Input
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            aria-describedby="emailHelp"
+          />
+
+          {/* Senha */}
           <Label htmlFor="password">Password</Label>
           <Input
             type="password"
@@ -36,13 +49,17 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
             minLength={6}
             required
           />
+
+          {/* Botão de submit */}
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up
           </SubmitButton>
+
+          {/* Exibir mensagens de erro/sucesso */}
           <FormMessage message={searchParams} />
         </div>
       </form>
       <SmtpMessage />
-    </>
+    </div>
   );
 }
