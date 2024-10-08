@@ -9,10 +9,11 @@ export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const name = formData.get("name")?.toString();
+  const username = formData.get("username")?.toString();
   const supabase = createClient();
   const origin = headers().get("origin");
 
-  if (!email || !password || !name) {
+  if (!email || !password || !name || !username) {
     return { error: "Name, email, and password are required" };
   }
 
@@ -23,6 +24,7 @@ export const signUpAction = async (formData: FormData) => {
       emailRedirectTo: `${origin}/auth/callback`,
       data: {
         name,
+        username,
       },
     },
   });

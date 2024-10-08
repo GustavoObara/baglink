@@ -9,6 +9,7 @@ const UrlInput: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [userId, setUserId] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const UrlInput: React.FC = () => {
 
       if (user && !error) {
         setUserId(user.id);
+        setUsername(user.user_metadata.username);
       } else {
         setError('Erro ao obter o ID do usuário.');
       }
@@ -45,6 +47,7 @@ const UrlInput: React.FC = () => {
         .from('items')
         .insert([{ 
           id_user: userId,  
+          username,
           url,               
           finish: false     
         }]);
@@ -69,12 +72,13 @@ const UrlInput: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto mt-4">
+    <div className="w-full mx-auto mt-4">
       <div className="flex items-center border border-gray-300 rounded-lg shadow-lg p-2">
         <input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder="Digite a URL..."
           className="flex-1 p-2 outline-none"
         />
@@ -87,8 +91,8 @@ const UrlInput: React.FC = () => {
         </button>
       </div>
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-      {success && <p className="text-green-500 mt-2">{success}</p>}
+      {/* {error && <p className="text-red-500 mt-2">{error}</p>}
+      {success && <p className="text-green-500 mt-2">{success}</p>} */}
     </div>
   );
 };

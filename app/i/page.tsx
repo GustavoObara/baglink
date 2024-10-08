@@ -13,7 +13,7 @@ export default async function ItemsPage() {
   }
 
   if(user) {
-    return redirect("i/" + user.id);
+    return redirect("i/" + user.user_metadata.username);
   }
 
   return (

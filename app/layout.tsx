@@ -5,7 +5,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
-import Link from "next/link";
+import Link from 'next/link';
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -25,30 +25,35 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground max-h-screen overflow-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
+          <main className="min-h-screen flex flex-col items-center w-full"> 
+            <div className="flex-1 w-full flex flex-col items-center overflow-y-auto overflow-x-hidden"> 
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                    <h3 className="text-2xl"> BAG<a className=" text-blue-500 cursor-pointer">LINK</a></h3>
+                  <div className="flex gap-5 items-center font-semibold">
+                    <Link href="/">
+                      <h3 className="text-2xl">
+                        BAG<span className="text-blue-500 cursor-pointer">LINK</span>
+                      </h3>
+                    </Link>
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
                 </div>
               </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
+              <div className="flex flex-col w-full max-w-7xl p-5">
                 {children}
               </div>
-
-              <footer className="w-full flex items-center justify-center border-t mx-auto py-4">
-                <ThemeSwitcher />
-              </footer>
             </div>
+
+            <footer className="w-full flex items-center justify-end border-t py-2 px-[100px] fixed bottom-0 left-0 bg-background">
+              <ThemeSwitcher />
+            </footer>
           </main>
         </ThemeProvider>
       </body>

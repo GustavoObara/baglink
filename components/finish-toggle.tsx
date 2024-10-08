@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
 interface FinishToggleProps {
-  itemId: number;
-  userId: string;  // O ID do usuário que criou o item
+  id: number;
+  currentUser: string;
+  linkUser: string;
+  onToggle: any;
   initialFinish: boolean;
 }
 
-const FinishToggle: React.FC<FinishToggleProps> = ({ itemId, currentUser, linkUser, initialFinish, onToggle }) => {
+const FinishToggle: React.FC<FinishToggleProps> = ({ id, currentUser, linkUser, initialFinish, onToggle }) => {
   const [finish, setFinish] = useState(initialFinish);
   const [loading, setLoading] = useState(false);
 
@@ -27,13 +29,12 @@ const FinishToggle: React.FC<FinishToggleProps> = ({ itemId, currentUser, linkUs
       const { data, error } = await supabase
         .from('items')
         .update({ finish: !finish })
-        .eq('id', itemId)
+        .eq('id', id)
         .eq('id_user', currentUser);  
 
       if (error) {
         throw error;
       }
-
 
       setFinish(!finish);
       if (onToggle) onToggle();
@@ -51,7 +52,7 @@ const FinishToggle: React.FC<FinishToggleProps> = ({ itemId, currentUser, linkUs
         type="checkbox"
         checked={finish}
         onChange={handleToggleFinish}
-        disabled={loading || currentUser !== linkUser} // Desabilita se o usuário não for o dono
+        disabled={loading || currentUser !== linkUser}
         className="form-checkbox h-5 w-5 text-blue-600"
       />
       {/* {loading && <span>Atualizando...</span>} */}

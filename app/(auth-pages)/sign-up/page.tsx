@@ -29,6 +29,9 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
           <Label htmlFor="name">Full Name</Label>
           <Input name="name" placeholder="Your full name" required />
 
+          <Label htmlFor="username">Username</Label>
+          <Input name="username" placeholder="@username" required />
+
           <Label htmlFor="email">Email</Label>
           <Input
             name="email"
