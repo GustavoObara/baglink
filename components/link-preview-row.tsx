@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import FinishToggle from './finish-toggle';
 import DeleteItemButton from './delete-button';
+import CopyItemButton from './copy-button';
 import { Skeleton } from "@/components/ui/skeleton"
-
+import { toast } from "sonner"
 
 import {
     Tooltip,
@@ -20,7 +21,7 @@ interface Item {
     created_at: string;
     finish: boolean;
     username: string;
-  }
+}
 
 interface PreviewData {
     image: string;
@@ -31,7 +32,7 @@ interface PreviewData {
 }
 
 
-const LinkPreviewRow = ({ items, currentUser, linkUser }: { items: Item[]; currentUser: string; linkUser: string}) => {
+const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Item[]; currentUser: string; linkUser: string; username: string;}) => {
     const [previewData, setPreviewData] = useState<PreviewData[]>([]);
     const [loading, setLoading] = useState(true);
     const [itemStates, setItemStates] = useState(items.map(item => item.finish));
@@ -141,12 +142,31 @@ const LinkPreviewRow = ({ items, currentUser, linkUser }: { items: Item[]; curre
                                             <DeleteItemButton 
                                                 id={items[index].id}
                                                 currentUser={currentUser} 
-                                                linkUser={linkUser}
+                                                linkUser={linkUser}                                               
                                             >
                                             </DeleteItemButton>
                                         </TooltipTrigger>
                                         <TooltipContent>
                                         <p>Deletar produto</p>
+                                        {/* TODO Alert Dialog para confirmação da exclusão */}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            )}
+                            {currentUser !== linkUser && (
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <CopyItemButton 
+                                                url={preview.url}
+                                                currentUserId={currentUser} 
+                                                username={username}
+                                            >
+                                            </CopyItemButton>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                        <p>Copiar produto para sua Baglink</p>
+                                        {/* TODO realizar um mini aviso ao copiar um item */}
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>

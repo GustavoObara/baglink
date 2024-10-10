@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Trash2 } from 'lucide-react';
+import { toast } from 'sonner'
 
 interface DeleteItemButtonProps {
     id: number,
@@ -10,7 +11,7 @@ interface DeleteItemButtonProps {
     linkUser: string,
 }
 
-const DeleteItemButton: React.FC<DeleteItemButtonProps> = ({ id, currentUser, linkUser, }) => {
+const DeleteItemButton: React.FC<DeleteItemButtonProps> = ({ id, currentUser, linkUser }) => {
     const [loading, setLoading] = useState(false);
     const supabase = createClient();
 
@@ -32,22 +33,29 @@ const DeleteItemButton: React.FC<DeleteItemButtonProps> = ({ id, currentUser, li
                 throw error;
             }
 
-            setTimeout(() => {
-                window.location.reload(); 
-            }, 1000);
+            window.location.reload(); 
 
         } catch (error) {
-            console.error('Erro ao atualizar o estado de finish:', error);
+            console.error('Erro ao deletar item de sua baglink:', error);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div
-            onClick={handleDelete}
+        <div            
             className="w-6 h-6 flex items-center border-solid border-2 border-gray-100 dark:border-gray-700 justify-center rounded"
             aria-label="Deletar item"
+            onClick={() => {                
+                toast("Deletar produto?", {
+                    description: "Este produto será removido de sua BagLink!",
+                    closeButton: true,
+                    action: {
+                        label: "Deletar",
+                        onClick: () => handleDelete(),
+                    },
+                });
+            }}
         >
             <Trash2 size={16}  />
         </div>

@@ -97,7 +97,7 @@ export default async function UserItemsPage({ params }: { params: { username: st
         
         {/* Container com overflow-y-auto para a lista de links */}
         <div className="overflow-y-auto min-w-full max-w-5xl mx-auto max-h-[60vh] mb-3">
-          <LinkPreviewRow items={items} currentUser={currentUser} linkUser={idUser} />
+          <LinkPreviewRow items={items} currentUser={currentUser} linkUser={idUser} username={user.user_metadata?.username}/>
         </div>
       </div>
     );    
@@ -130,7 +130,7 @@ export default async function UserItemsPage({ params }: { params: { username: st
       
       {/* Container flexível com rolagem na lista */}
       <div className="flex-1 overflow-y-auto w-full max-w-5xl mx-auto max-h-[70vh]">
-        <LinkPreviewRow items={items} currentUser={currentUser} linkUser={idUser} />
+        <LinkPreviewRow items={items} currentUser={currentUser} linkUser={idUser} username={user.user_metadata?.username}/>
       </div>
   
       {/* UrlInput no final da página */}
