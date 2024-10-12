@@ -73,19 +73,19 @@ const UrlInput: React.FC = () => {
 
   return (
     <div className="w-full mx-auto mt-4">
-      <div className="flex items-center border border-gray-300 rounded-lg shadow-lg p-2">
+      <div className="flex items-center border border-gray-300 rounded-full shadow-lg">
         <input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder="Digite a URL..."
-          className="flex-1 p-2 outline-none"
+          className="flex-1 p-2 px-5 outline-none rounded-full"
         />
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
+          className="bg-blue-500 text-white px-4 py-2 ml-2 rounded-full hover:bg-blue-600 disabled:opacity-50"
         >
           {loading ? 'Enviando...' : 'Enviar'}
         </button>

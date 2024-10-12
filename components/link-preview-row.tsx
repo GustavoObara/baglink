@@ -4,60 +4,29 @@ import { useEffect, useState } from 'react';
 import FinishToggle from './finish-toggle';
 import DeleteItemButton from './delete-button';
 import CopyItemButton from './copy-button';
-import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
+import ItemSkeleton from './item-skeleton';
+
 
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
-interface Item {
-    id: number;
-    id_user: string;
-    url: string;
-    created_at: string;
-    finish: boolean;
-    username: string;
-}
-
-interface PreviewData {
-    image: string;
-    price: string;
-    title: string;
-    site: string;
-    url: string;
-}
+import { fetchLinkPreview } from '@/services/linkPreviewService';
+import { Item } from '@/interfaces/Item';
+import { PreviewData } from '@/interfaces/PreviewData';
 
 
-const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Item[]; currentUser: string; linkUser: string; username: string;}) => {
+const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Item[]; currentUser: string; linkUser: string; username: string; }) => {
     const [previewData, setPreviewData] = useState<PreviewData[]>([]);
     const [loading, setLoading] = useState(true);
     const [itemStates, setItemStates] = useState(items.map(item => item.finish));
 
-    // Função responsável por buscar os dados de preview do backend
-    const fetchPreviewData = async (url: string) => {
-        try {
-            const response = await fetch('http://localhost:5000/link-preview', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ url }),
-            });
-                const data = await response.json();
-                return data;
-        } catch (error) {
-            console.error(`Failed to fetch preview for ${url}`, error);
-            return { image: '', price: '', title: 'Erro ao carregar', site: '', url: '' };
-        }
-    };
-
     useEffect(() => {
         const fetchAllPreviews = async () => {
-            const previews = await Promise.all(items.map(item => fetchPreviewData(item.url)));
+            const previews = await Promise.all(items.map(item => fetchLinkPreview(item.url)));
             setPreviewData(previews);
             setLoading(false);
         };
@@ -69,26 +38,7 @@ const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Ite
             <div className="flex flex-col space-y-4 mt-3 mx-3">
                 {items.map((_, index) => (
                     <div key={index} className="flex">
-                        <div className="flex items-center mx-3">
-                            <Skeleton className="h-6 w-6 rounded" /> {/* Placeholder for the FinishToggle */}
-                        </div>
-
-                        <div className="flex p-4 border border-gray-300 w-full rounded-lg shadow-lg">
-                            <div className="flex items-center space-x-4">
-                                <Skeleton className="w-32 h-32 rounded-lg" /> {/* Placeholder for the image */}
-                            </div>
-
-                            <div className="flex-1 ml-4 space-y-2">
-                                <Skeleton className="h-5 w-[200px]" /> {/* Placeholder for the title */}
-                                <Skeleton className="h-6 w-[125px]" /> {/* Placeholder for the price */}
-                                <Skeleton className="h-3 w-[150px]" /> {/* Placeholder for the site */}
-                                <Skeleton className="h-4 w-[700px]" /> {/* Placeholder for the URL */}
-                            </div>
-
-                            <div className="flex items-start mx-3">
-                                <Skeleton className="h-6 w-6 rounded" /> {/* Placeholder for the DeleteItemButton */}
-                            </div>
-                        </div>
+                        <ItemSkeleton/>
                     </div>
                 ))}
             </div>
@@ -125,9 +75,9 @@ const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Ite
                         <div className="flex-1 ml-4">
                             <h3 className="text-lg font-semibold">{preview.title}</h3>
                             <h2 className="text-xl text-green-600 font-bold">
-                                {isNaN(Number(preview.price.replace(',', '.')))
+                                {isNaN(Number(preview.price.replace(/\./g, '').replace(',', '.')))
                                     ? preview.price
-                                    : `R$ ${Number(preview.price.replace(',', '.')).toFixed(2).replace('.', ',')}`}
+                                    : `R$ ${Number(preview.price.replace(/\./g, '').replace(',', '.')).toFixed(2).replace('.', ',')}`}
                             </h2>
                             <h6 className="text-sm text-gray-500">{preview.site}</h6>
                             <a href={preview.url} className="text-blue-500" target="_blank" rel="noopener noreferrer">
@@ -143,12 +93,10 @@ const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Ite
                                                 id={items[index].id}
                                                 currentUser={currentUser} 
                                                 linkUser={linkUser}                                               
-                                            >
-                                            </DeleteItemButton>
+                                            />
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                        <p>Deletar produto</p>
-                                        {/* TODO Alert Dialog para confirmação da exclusão */}
+                                            <p>Deletar produto</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -161,12 +109,10 @@ const LinkPreviewRow = ({ items, username, currentUser, linkUser }: { items: Ite
                                                 url={preview.url}
                                                 currentUserId={currentUser} 
                                                 username={username}
-                                            >
-                                            </CopyItemButton>
+                                            />
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                        <p>Copiar produto para sua Baglink</p>
-                                        {/* TODO realizar um mini aviso ao copiar um item */}
+                                            <p>Copiar produto para sua Baglink</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>

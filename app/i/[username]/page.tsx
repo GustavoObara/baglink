@@ -1,16 +1,17 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Item } from '@/interfaces/Item';
 import LinkPreviewRow from "@/components/link-preview-row";
 import UrlInput from "@/components/input-item";
+import CopyUrlButton from '@/components/copy-url-button';
+import TotalLabel from '@/components/total-label'; 
 
-interface Item {
-  id: number;
-  id_user: string;
-  url: string;
-  created_at: string;
-  finish: boolean;
-  username: string;
-}
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default async function UserItemsPage({ params }: { params: { username: string } }) {
   const supabase = createClient();
@@ -90,10 +91,26 @@ export default async function UserItemsPage({ params }: { params: { username: st
     }
     // Exibição dos produtos de um usuário !== do currentUser
     return (
-      <div className="min-h-full flex flex-col overflow-x-hidden">
-        <h3 className="text-2xl font-bold mb-4 ">
-          Aqui estão os produtos de {userName}
-        </h3>
+      <div className="min-h-full flex flex-col overflow-x-hidden">        
+        <div className="flex justify-between">      
+          <h3 className="text-2xl font-bold mb-4 w-full max-w-5xl">
+            Aqui estão os produtos de {userName}
+          </h3>
+          <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger type="button">
+                  <CopyUrlButton
+                    userId={currentUser} 
+                    OwnerBagId={idUser}
+                    nameUser={userName}
+                  />            
+                </TooltipTrigger>
+                <TooltipContent>
+                <p>Copiar Url</p>
+                </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         
         {/* Container com overflow-y-auto para a lista de links */}
         <div className="overflow-y-auto min-w-full max-w-5xl mx-auto max-h-[60vh] mb-3">
@@ -122,21 +139,39 @@ export default async function UserItemsPage({ params }: { params: { username: st
 
   // Renderiza a lista de produtos do currentUser
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       {/* Título no topo */}
-      <h3 className="text-2xl font-bold mb-4 w-full max-w-5xl mx-auto">
-        {user.user_metadata?.name.charAt(0).toUpperCase() + user.user_metadata?.name.slice(1)} aqui estão seus produtos!
-      </h3>
+      <div className="flex justify-between">      
+        <h3 className="text-2xl font-bold mb-4 w-full max-w-5xl">
+          {user.user_metadata?.name.charAt(0).toUpperCase() + user.user_metadata?.name.slice(1)} aqui estão seus produtos!
+        </h3>
+        <TooltipProvider>
+          <Tooltip>
+              <TooltipTrigger type="button">
+                <CopyUrlButton
+                   userId={currentUser} 
+                   OwnerBagId={idUser}
+                />            
+              </TooltipTrigger>
+              <TooltipContent>
+              <p>Copiar Url</p>
+              </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
       
       {/* Container flexível com rolagem na lista */}
-      <div className="flex-1 overflow-y-auto w-full max-w-5xl mx-auto max-h-[70vh]">
+      <div className="flex-1 overflow-y-auto min-w-full max-w-5xl mx-auto max-h-[70vh]">
         <LinkPreviewRow items={items} currentUser={currentUser} linkUser={idUser} username={user.user_metadata?.username}/>
       </div>
   
       {/* UrlInput no final da página */}
-      <div className="mt-auto w-full">
-        <div className="mx-auto w-full max-w-5xl mb-[150px]">
+      <div className="mt-auto w-full flex justify-between mb-[150px]">
+        <div className="mx-auto w-full max-w-5xl">
           <UrlInput />
+        </div>
+        <div className="content-center">
+          <TotalLabel items={items}/>
         </div>
       </div>
     </div>
