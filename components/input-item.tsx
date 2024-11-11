@@ -72,7 +72,7 @@ const UrlInput: React.FC = () => {
   };
 
   return (
-    <div className="w-full mx-auto mt-4">
+    <div className="w-full mx-auto">
       <div className="flex items-center border border-gray-300 rounded-full shadow-lg">
         <input
           type="text"

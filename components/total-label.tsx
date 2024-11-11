@@ -33,7 +33,7 @@ export default function TotalLabel({ items }: TotalLabelProps) {
   }, [calculateTotalPrice]);
 
   return (
-    <div>
+    <div className="">
       <label className='text-lg font-semibold'>Total: R$ {totalPrice.toFixed(2).replace('.', ',')}</label>
     </div>
   );

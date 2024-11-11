@@ -13,7 +13,7 @@ export default async function ItemsPage() {
   }
 
   if(user) {
-    return redirect("i/" + user.user_metadata.username);
+    return redirect("bag/" + user.user_metadata.username);
   }
 
   return (
@@ -21,7 +21,7 @@ export default async function ItemsPage() {
       {!user ? (
         <h1>Você não está autenticado. Por favor, faça login.</h1>
       ) : (
-        <h1>Redirecionando...</h1>
+        <h1>Redirecionando você para pagina de login...</h1>
       )}
     </div>
   );
